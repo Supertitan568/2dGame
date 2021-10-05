@@ -4,11 +4,18 @@
 #include "SFML/Graphics.hpp"
 
 struct object{
-    sf::Texture texture;
-    int pos [2];
-    int size [2];
     sf::Sprite sprite;
-    object (char type, int x, int y);
+
+    sf::Texture Wtexture;
+    sf::Texture Atexture;
+    sf::Texture Stexture;
+    sf::Texture Dtexture;
+
+    char type;
+    int size[2];
+    int offset[2];
+
+    object (char t, int x, int y);
 };
 
 #endif

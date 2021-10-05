@@ -2,6 +2,7 @@
 #include "object.h"
 #include <SFML/OpenGL.hpp>
 #include <vector>
+
 std::vector<object> allObjects {object('L',10,10)};
 void gameEngine::runGame(){
     init();
@@ -13,8 +14,9 @@ void gameEngine::runGame(){
 }
 
 bool gameEngine::init (){
-    allObjects[0].sprite.setTexture(allObjects[0].texture);
-    if (!map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), level, 16, 8))
+    allObjects[0].sprite.setTexture(allObjects[0].Stexture);
+    map.loadLevel("1",map.level);
+    if (!map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8))
         return false;
     window.create(sf::VideoMode(800, 600), "2DGame");
     window.setVerticalSyncEnabled(true);
@@ -45,20 +47,22 @@ void gameEngine::render (){
 }
 
 void gameEngine::registerKeyPress (){
+    static sf::Vector2f pos = allObjects[0].sprite.getPosition();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-        allObjects[0].pos[1]--;
-        allObjects[0].sprite.setPosition(allObjects[0].pos[0], allObjects[0].pos[1]);
+        allObjects[0].sprite.setTexture(allObjects[0].Wtexture);
+        allObjects[0].sprite.setPosition(pos.x, pos.y--);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
-        allObjects[0].pos[0]--;
-        allObjects[0].sprite.setPosition(allObjects[0].pos[0], allObjects[0].pos[1]);
+        allObjects[0].sprite.setTexture(allObjects[0].Atexture);
+        allObjects[0].sprite.setPosition(pos.x--, pos.y);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-        allObjects[0].pos[1]++;
-        allObjects[0].sprite.setPosition(allObjects[0].pos[0], allObjects[0].pos[1]);
+        allObjects[0].sprite.setTexture(allObjects[0].Stexture);
+        allObjects[0].sprite.setPosition(pos.x, pos.y++);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-        allObjects[0].pos[0]++;
-        allObjects[0].sprite.setPosition(allObjects[0].pos[0], allObjects[0].pos[1]);
+        allObjects[0].sprite.setTexture(allObjects[0].Dtexture);
+        allObjects[0].sprite.setPosition(pos.x++, pos.y);
     }    
 }
+

@@ -14,5 +14,7 @@ private:
     sf::Texture m_tileset;
 public:
     bool load(const std::string& tileset, sf::Vector2f tSTM, sf::Vector2u tStM, const int* tiles, unsigned int width, unsigned int height);
+    void loadLevel(std::string levelNum, int *loadingLevel);
+    int level[128];
 };
 #endif
