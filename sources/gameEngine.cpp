@@ -1,19 +1,29 @@
 #include "gameEngine.h"
-#include "object.h"
 #include <SFML/OpenGL.hpp>
 #include <vector>
+#include<iostream>
 
-std::vector<object> allObjects {object('L',10,10)};
 void gameEngine::runGame(){
-    init();
     while(window.isOpen()){
         pollWindowEvents();
+        pollGameEvents();
         registerKeyPress();
         render();
     }
 }
 
+void gameEngine::pollGameEvents(){
+    sf::Vector2f pos = allObjects[0].sprite.getPosition();
+    if(pos.y == 600){
+        map.loadLevel("2",map.level);
+        allObjects[0].sprite.setPosition(pos.x, 0);
+        std::cout << pos.y << '\n';
+        map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8);    
+    }
+}
+
 bool gameEngine::init (){
+    allObjects.push_back(object('L',10,10));
     allObjects[0].sprite.setTexture(allObjects[0].Stexture);
     map.loadLevel("1",map.level);
     if (!map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8))
@@ -22,6 +32,15 @@ bool gameEngine::init (){
     window.setVerticalSyncEnabled(true);
     window.setActive(true);
     return true;
+}
+
+void gameEngine::render (){
+    window.clear(sf::Color::Black);
+    window.draw(map);
+    for(int o=0; o<allObjects.size(); o++){
+        window.draw(allObjects[o].sprite);
+    }
+    window.display();
 }
 
 void gameEngine::pollWindowEvents (){
@@ -37,32 +56,22 @@ void gameEngine::pollWindowEvents (){
     }
 }
 
-void gameEngine::render (){
-    window.clear(sf::Color::Black);
-    window.draw(map);
-    for(int o=0; o<allObjects.size(); o++){
-        window.draw(allObjects[o].sprite);
-    }
-    window.display();
-}
-
 void gameEngine::registerKeyPress (){
-    static sf::Vector2f pos = allObjects[0].sprite.getPosition();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
         allObjects[0].sprite.setTexture(allObjects[0].Wtexture);
-        allObjects[0].sprite.setPosition(pos.x, pos.y--);
+        allObjects[0].sprite.move(0,-1);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
         allObjects[0].sprite.setTexture(allObjects[0].Atexture);
-        allObjects[0].sprite.setPosition(pos.x--, pos.y);
+        allObjects[0].sprite.move(-1,0);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
         allObjects[0].sprite.setTexture(allObjects[0].Stexture);
-        allObjects[0].sprite.setPosition(pos.x, pos.y++);
+        allObjects[0].sprite.move(0,1);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
         allObjects[0].sprite.setTexture(allObjects[0].Dtexture);
-        allObjects[0].sprite.setPosition(pos.x++, pos.y);
+        allObjects[0].sprite.move(1,0);
     }    
 }
 
