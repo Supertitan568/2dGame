@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cstdlib>
 
 bool tileMap::load(const std::string& tileset, sf::Vector2f tSTM, sf::Vector2u tStM , const int* tiles, unsigned int width, unsigned int height){
     if (!m_tileset.loadFromFile(tileset))
@@ -50,8 +51,24 @@ bool tileMap::load(const std::string& tileset, sf::Vector2f tSTM, sf::Vector2u t
 void tileMap::loadLevel(std::string levelNum, int *loadingLevel){
     std::string levelContents;
     std::string levelName = "level" + levelNum + ".txt";
-    std::ifstream levelFile(levelName);
-    getline(levelFile, levelContents);
+    std::ifstream levelFile;
+    levelFile.open(levelName);
+    //makes new level if level file not found in bin directory
+    if(levelFile){
+        getline(levelFile, levelContents);
+        levelFile.close();
+    }
+    else{
+        for(int i=0; i<128; i++){
+            levelContents.append(std::to_string(rand() % 4));
+        }
+        std::ofstream newLevelFile(levelName);
+        for(int i=0; i<128; i++){
+            newLevelFile << levelContents[i];
+        }
+        newLevelFile.close();
+    }
+
     for(int i=0; i<128; i++){
         loadingLevel[i] = (int)levelContents[i] - 48;
     }

@@ -15,17 +15,41 @@ void gameEngine::runGame(){
 void gameEngine::pollGameEvents(){
     sf::Vector2f pos = allObjects[0].sprite.getPosition();
     if(pos.y == 600){
-        map.loadLevel("2",map.level);
-        allObjects[0].sprite.setPosition(pos.x, 0);
-        std::cout << pos.y << '\n';
+        levelNumY -= 1;
+        std::string levelNum = std::to_string(levelNumX) + std::to_string(levelNumY);
+        map.loadLevel(levelNum ,map.level);
+        allObjects[0].sprite.setPosition(pos.x, 1);
         map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8);    
+    }
+    else if(pos.y == 0){
+        levelNumY += 1;
+        std::string levelNum = std::to_string(levelNumX) + std::to_string(levelNumY);
+        map.loadLevel(levelNum ,map.level);
+        allObjects[0].sprite.setPosition(pos.x, 599);
+        map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8);
+    }
+    else if(pos.x == 800){
+        levelNumX += 1;
+        std::string levelNum = std::to_string(levelNumX) + std::to_string(levelNumY);
+        map.loadLevel(levelNum ,map.level);
+        allObjects[0].sprite.setPosition(1, pos.y);
+        map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8);
+    }
+    else if(pos.x == 0){
+        levelNumX -= 1;
+        map.loadLevel(std::to_string(levelNumX) + std::to_string(levelNumY) ,map.level);
+        allObjects[0].sprite.setPosition(799, pos.y);
+        map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8);
     }
 }
 
 bool gameEngine::init (){
     allObjects.push_back(object('L',10,10));
     allObjects[0].sprite.setTexture(allObjects[0].Stexture);
-    map.loadLevel("1",map.level);
+    levelNumX = 0;
+    levelNumY = 0;
+    std::string levelNum = std::to_string(levelNumX) + std::to_string(levelNumY);
+    map.loadLevel(levelNum,map.level);
     if (!map.load("tileSet.png", sf::Vector2f(50,75),sf::Vector2u(32,32), map.level, 16, 8))
         return false;
     window.create(sf::VideoMode(800, 600), "2DGame");

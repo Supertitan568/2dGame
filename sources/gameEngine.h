@@ -6,6 +6,8 @@
 
 class gameEngine{
 private:
+    int levelNumX;
+    int levelNumY;
     tileMap map;
     sf::RenderWindow window;
     std::vector<object> allObjects;
