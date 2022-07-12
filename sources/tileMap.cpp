@@ -50,7 +50,7 @@ bool tileMap::load(const std::string& tileset, sf::Vector2f tSTM, sf::Vector2u t
 
 void tileMap::loadLevel(std::string levelNum, int *loadingLevel){
     std::string levelContents;
-    std::string levelName = "level" + levelNum + ".txt";
+    std::string levelName = "./bin/level" + levelNum + ".txt";
     std::ifstream levelFile;
     levelFile.open(levelName);
     //makes new level if level file not found in bin directory
